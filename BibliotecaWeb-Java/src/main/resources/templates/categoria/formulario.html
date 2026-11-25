@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(${categoria.id != null ? 'Editar Categoria' : 'Nova Categoria'}, ~{::conteudo})}">
+<body>
+
+<div th:fragment="conteudo">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0" th:text="${categoria.id != null ? 'Editar Categoria' : 'Nova Categoria'}">Nova Categoria</h1>
+            <p class="text-muted small mb-0">Preencha os dados da categoria</p>
+        </div>
+        <a class="btn btn-outline-secondary" th:href="@{/categorias}">Voltar</a>
+    </div>
+
+    <div class="card border shadow-sm">
+        <div class="card-body p-4">
+            <form method="post" th:action="@{/categorias/salvar}" th:object="${categoria}">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+                    <input type="text" id="nome" class="form-control" th:field="*{nome}"
+                           th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid' : ''"
+                           placeholder="Ex.: Engenharia de Software" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea id="descricao" rows="3" class="form-control" th:field="*{descricao}"
+                              th:classappend="${#fields.hasErrors('descricao')} ? 'is-invalid' : ''"
+                              placeholder="Descrição opcional da categoria..."></textarea>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/categorias}">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

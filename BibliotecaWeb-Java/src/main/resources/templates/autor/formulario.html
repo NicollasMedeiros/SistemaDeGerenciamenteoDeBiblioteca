@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(${autor.id != null ? 'Editar Autor' : 'Novo Autor'}, ~{::conteudo})}">
+<body>
+
+<div th:fragment="conteudo">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0" th:text="${autor.id != null ? 'Editar Autor' : 'Novo Autor'}">Novo Autor</h1>
+            <p class="text-muted small mb-0">Preencha os dados do autor</p>
+        </div>
+        <a class="btn btn-outline-secondary" th:href="@{/autores}">Voltar</a>
+    </div>
+
+    <div class="card border shadow-sm">
+        <div class="card-body p-4">
+            <form method="post" th:action="@{/autores/salvar}" th:object="${autor}">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+                    <input type="text" id="nome" class="form-control" th:field="*{nome}"
+                           th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid' : ''"
+                           placeholder="Ex.: Robert C. Martin" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="nacionalidade" class="form-label">Nacionalidade</label>
+                    <input type="text" id="nacionalidade" class="form-control" th:field="*{nacionalidade}"
+                           th:classappend="${#fields.hasErrors('nacionalidade')} ? 'is-invalid' : ''"
+                           placeholder="Ex.: Norte-americano">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nacionalidade')}" th:errors="*{nacionalidade}"></div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="biografia" class="form-label">Biografia</label>
+                    <textarea id="biografia" rows="3" class="form-control" th:field="*{biografia}"
+                              th:classappend="${#fields.hasErrors('biografia')} ? 'is-invalid' : ''"
+                              placeholder="Breve resumo biográfico do autor..."></textarea>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('biografia')}" th:errors="*{biografia}"></div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/autores}">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

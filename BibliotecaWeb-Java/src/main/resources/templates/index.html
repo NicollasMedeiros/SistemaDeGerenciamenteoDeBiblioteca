@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Início', ~{::conteudo})}">
+<body>
+
+<div th:fragment="conteudo">
+    <div class="p-4 p-md-5 mb-4 bg-white rounded-3 border shadow-sm">
+        <div class="col-lg-8">
+            <h1 class="display-6 fw-bold mb-2">Gestão de Biblioteca</h1>
+            <p class="text-muted mb-4">
+                Controle o catálogo de livros, autores, categorias, leitores e o fluxo de empréstimos e devoluções com atualização automática de estoque.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary" th:href="@{/emprestimos/novo}">Novo empréstimo</a>
+                <a class="btn btn-outline-secondary" th:href="@{/livros}">Ver catálogo</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 border shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted small mb-1">Livros</div>
+                    <h2 class="h5 card-title">Catálogo</h2>
+                    <p class="card-text small text-muted">Consulte títulos, ISBN, autores e exemplares disponíveis.</p>
+                    <a th:href="@{/livros}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 border shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted small mb-1">Autores e temas</div>
+                    <h2 class="h5 card-title">Autores &amp; Categorias</h2>
+                    <p class="card-text small text-muted">Organize escritores e classificações do acervo.</p>
+                    <div class="d-flex gap-3 mt-2 position-relative">
+                        <a th:href="@{/autores}" class="small">Autores</a>
+                        <a th:href="@{/categorias}" class="small">Categorias</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 border shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted small mb-1">Leitores</div>
+                    <h2 class="h5 card-title">Usuários</h2>
+                    <p class="card-text small text-muted">Gerencie cadastros, matrículas e situação ativa.</p>
+                    <a th:href="@{/usuarios}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 border shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted small mb-1">Circulação</div>
+                    <h2 class="h5 card-title">Empréstimos</h2>
+                    <p class="card-text small text-muted">Registre retiradas, prazos e devoluções.</p>
+                    <a th:href="@{/emprestimos}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

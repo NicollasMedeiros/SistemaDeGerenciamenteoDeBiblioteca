@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(${livro.id != null ? 'Editar Livro' : 'Novo Livro'}, ~{::conteudo})}">
+<body>
+
+<div th:fragment="conteudo">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0" th:text="${livro.id != null ? 'Editar Livro' : 'Novo Livro'}">Novo Livro</h1>
+            <p class="text-muted small mb-0">Preencha os dados do livro, categoria, autores e quantidade de exemplares</p>
+        </div>
+        <a class="btn btn-outline-secondary" th:href="@{/livros}">Voltar</a>
+    </div>
+
+    <div class="card border shadow-sm">
+        <div class="card-body p-4">
+            <form method="post" th:action="@{/livros/salvar}" th:object="${livro}">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        <label for="titulo" class="form-label">Título <span class="text-danger">*</span></label>
+                        <input type="text" id="titulo" class="form-control" th:field="*{titulo}"
+                               th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid' : ''"
+                               placeholder="Ex.: Engenharia de Software Moderna" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="isbn" class="form-label">ISBN</label>
+                        <input type="text" id="isbn" class="form-control" th:field="*{isbn}"
+                               th:classappend="${#fields.hasErrors('isbn')} ? 'is-invalid' : ''"
+                               placeholder="Ex.: 978-65-80000-00-0">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}"></div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="categoria" class="form-label">Categoria <span class="text-danger">*</span></label>
+                        <select id="categoria" class="form-select" th:field="*{categoria.id}"
+                                th:classappend="${#fields.hasErrors('categoria')} or ${#fields.hasErrors('categoria.id')} ? 'is-invalid' : ''"
+                                required>
+                            <option value="">Selecione uma categoria...</option>
+                            <option th:each="cat : ${categorias}"
+                                    th:value="${cat.id}"
+                                    th:text="${cat.nome}">Categoria</option>
+                        </select>
+                        <div class="invalid-feedback"
+                             th:if="${#fields.hasErrors('categoria')} or ${#fields.hasErrors('categoria.id')}"
+                             th:text="${#fields.hasErrors('categoria') ? #fields.errors('categoria')[0] : #fields.errors('categoria.id')[0]}"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="quantidadeTotal" class="form-label">Quantidade total de exemplares <span class="text-danger">*</span></label>
+                        <input type="number" id="quantidadeTotal" min="1" class="form-control" th:field="*{quantidadeTotal}"
+                               th:classappend="${#fields.hasErrors('quantidadeTotal')} ? 'is-invalid' : ''"
+                               required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('quantidadeTotal')}" th:errors="*{quantidadeTotal}"></div>
+                        <div class="form-text" th:if="${livro.id != null}">
+                            Disponíveis no momento: <strong th:text="${livro.quantidadeDisponivel}">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="autores" class="form-label">Autores <span class="text-danger">*</span></label>
+                    <select id="autores" class="form-select" multiple size="5" th:field="*{autores}"
+                            th:classappend="${#fields.hasErrors('autores')} ? 'is-invalid' : ''"
+                            required>
+                        <option th:each="autor : ${autores}"
+                                th:value="${autor.id}"
+                                th:text="${autor.nome}">Autor</option>
+                    </select>
+                    <div class="form-text">Segure Ctrl (ou Cmd no macOS) para selecionar mais de um autor.</div>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('autores')}" th:errors="*{autores}"></div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/livros}">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

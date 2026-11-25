@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Erro', ~{::conteudo})}">
+<body>
+
+<div th:fragment="conteudo">
+    <div class="row justify-content-center my-4">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border shadow-sm">
+                <div class="card-body p-4 text-center">
+                    <h1 class="h3 text-danger mb-2">Algo correu mal</h1>
+                    <p class="text-muted mb-3"
+                       th:text="${mensagemErro != null ? mensagemErro : 'Não foi possível concluir a operação solicitada.'}">
+                        Não foi possível concluir a operação solicitada.
+                    </p>
+
+                    <div th:if="${detalheErro != null and !#strings.isEmpty(detalheErro)}"
+                         class="alert alert-secondary text-start small mb-4"
+                         th:text="${detalheErro}">
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-2">
+                        <a class="btn btn-primary" th:href="@{/}">Voltar ao início</a>
+                        <button type="button" class="btn btn-outline-secondary" onclick="history.back()">
+                            Voltar atrás
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

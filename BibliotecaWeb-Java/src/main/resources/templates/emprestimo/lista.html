@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Empréstimos', ~{::conteudo})}">
+<body>
+
+<div th:fragment="conteudo">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+            <h1 class="h3 mb-0">Empréstimos</h1>
+            <p class="text-muted small mb-0">Acompanhe retiradas, prazos de devolução e status de circulação</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/emprestimos/novo}">Novo empréstimo</a>
+    </div>
+
+    <form class="row g-2 mb-4" method="get" th:action="@{/emprestimos}">
+        <div class="col-sm-9 col-md-10">
+            <input type="text" class="form-control" name="busca" th:value="${busca}"
+                   placeholder="Buscar empréstimo por usuário, matrícula ou livro...">
+        </div>
+        <div class="col-sm-3 col-md-2 d-grid">
+            <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+        </div>
+    </form>
+
+    <div class="card border shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th style="width: 65px;">ID</th>
+                    <th>Usuário</th>
+                    <th>Livro</th>
+                    <th>Data do empréstimo</th>
+                    <th>Prevista para</th>
+                    <th>Devolução</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-end" style="width: 190px;">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(emprestimos)}">
+                    <td colspan="8" class="text-center text-muted py-4">
+                        Nenhum empréstimo encontrado.
+                    </td>
+                </tr>
+                <tr th:each="emprestimo : ${emprestimos}">
+                    <td th:text="${emprestimo.id}">1</td>
+                    <td class="fw-semibold" th:text="${emprestimo.usuario != null ? emprestimo.usuario.nome : '—'}">—</td>
+                    <td th:text="${emprestimo.livro != null ? emprestimo.livro.titulo : '—'}">—</td>
+                    <td th:text="${emprestimo.dataEmprestimo != null ? #temporals.format(emprestimo.dataEmprestimo, 'dd/MM/yyyy') : '—'}">—</td>
+                    <td th:text="${emprestimo.dataPrevistaDevolucao != null ? #temporals.format(emprestimo.dataPrevistaDevolucao, 'dd/MM/yyyy') : '—'}">—</td>
+                    <td th:text="${emprestimo.dataDevolucao != null ? #temporals.format(emprestimo.dataDevolucao, 'dd/MM/yyyy') : '—'}">—</td>
+                    <td class="text-center">
+                        <span class="badge"
+                              th:classappend="${emprestimo.dataDevolucao != null} ? 'bg-secondary' : (${emprestimo.dataPrevistaDevolucao != null and emprestimo.dataPrevistaDevolucao.isBefore(T(java.time.LocalDate).now())} ? 'bg-danger' : 'bg-success')"
+                              th:text="${emprestimo.dataDevolucao != null} ? 'Devolvido' : (${emprestimo.dataPrevistaDevolucao != null and emprestimo.dataPrevistaDevolucao.isBefore(T(java.time.LocalDate).now())} ? 'Atrasado' : 'Em andamento')">
+                            Em andamento
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <form th:if="${emprestimo.dataDevolucao == null}"
+                                  method="post"
+                                  th:action="@{/emprestimos/devolver/{id}(id=${emprestimo.id})}"
+                                  onsubmit="return confirm('Confirmar a devolução deste livro?');">
+                                <button type="submit" class="btn btn-sm btn-outline-success">Devolver</button>
+                            </form>
+                            <form method="post"
+                                  th:action="@{/emprestimos/excluir/{id}(id=${emprestimo.id})}"
+                                  onsubmit="return confirm('Deseja realmente excluir este registo de empréstimo?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

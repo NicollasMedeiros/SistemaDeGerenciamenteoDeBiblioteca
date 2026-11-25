@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Livros', ~{::conteudo})}">
+<body>
+
+<div th:fragment="conteudo">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+            <h1 class="h3 mb-0">Livros</h1>
+            <p class="text-muted small mb-0">Gerencie o catálogo, autores, categorias e exemplares disponíveis</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/livros/novo}">Novo livro</a>
+    </div>
+
+    <form class="row g-2 mb-4" method="get" th:action="@{/livros}">
+        <div class="col-sm-9 col-md-10">
+            <input type="text" class="form-control" name="busca" th:value="${busca}"
+                   placeholder="Buscar livro por título, ISBN, categoria ou autor...">
+        </div>
+        <div class="col-sm-3 col-md-2 d-grid">
+            <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+        </div>
+    </form>
+
+    <div class="card border shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th style="width: 65px;">ID</th>
+                    <th>Título</th>
+                    <th>ISBN</th>
+                    <th>Categoria</th>
+                    <th>Autores</th>
+                    <th class="text-center">Exemplares</th>
+                    <th class="text-end" style="width: 180px;">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(livros)}">
+                    <td colspan="7" class="text-center text-muted py-4">
+                        Nenhum livro encontrado.
+                    </td>
+                </tr>
+                <tr th:each="livro : ${livros}">
+                    <td th:text="${livro.id}">1</td>
+                    <td class="fw-semibold" th:text="${livro.titulo}">Código Limpo</td>
+                    <td th:text="${livro.isbn != null and !#strings.isEmpty(livro.isbn) ? livro.isbn : '—'}">—</td>
+                    <td th:text="${livro.categoria != null ? livro.categoria.nome : '—'}">—</td>
+                    <td>
+                        <span th:if="${#lists.isEmpty(livro.autores)}" class="text-muted">—</span>
+                        <span th:each="autor, iterStat : ${livro.autores}">
+                            <span th:text="${autor.nome}">Autor</span><span th:if="${!iterStat.last}">, </span>
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge"
+                              th:classappend="${livro.quantidadeDisponivel > 0} ? 'bg-success' : 'bg-secondary'"
+                              th:text="${livro.quantidadeDisponivel + ' / ' + livro.quantidadeTotal}">
+                            3 / 3
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a class="btn btn-sm btn-outline-primary"
+                               th:href="@{/livros/editar/{id}(id=${livro.id})}">Editar</a>
+                            <form method="post" th:action="@{/livros/excluir/{id}(id=${livro.id})}"
+                                  onsubmit="return confirm('Deseja realmente excluir este livro?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
