@@ -5,28 +5,28 @@ Aplicação web desenvolvida em Java com Spring Boot para o gerenciamento comple
 ## Funcionalidades
 
 - **Dashboard Inicial (`/`)**: Visão geral e navegação rápida entre os módulos do sistema.
-- **Gestão de Livros (`/livros`)**: Cadastro, consulta, edição e controle de disponibilidade de exemplares.
-- **Gestão de Autores (`/autores`)**: Cadastro e vínculo de autores às obras do acervo.
+- **Gestão de Livros (`/livros`)**: Cadastro, consulta, edição e controle de disponibilidade de exemplares, incluindo validação de campos obrigatórios (como título, categoria, ano de publicação, quantidade total e autores).
+- **Gestão de Autores (`/autores`)**: Cadastro, listagem e vínculo de autores às obras do acervo.
 - **Gestão de Categorias (`/categorias`)**: Organização e classificação dos livros por gênero ou área de conhecimento.
-- **Gestão de Usuários (`/usuarios`)**: Cadastro de leitores com validação de e-mail e matrícula únicos, além de controle de status ativo/inativo.
+- **Gestão de Usuários (`/usuarios`)**: Cadastro de leitores com validação de e-mail e matrícula única, além de controle de status ativo/inativo.
 - **Controle de Empréstimos (`/emprestimos`)**: Registro de retirada e devolução de livros, impedindo a exclusão de usuários com empréstimos ativos.
 
-## Tecnologias Utilizadas
+## Stack Utilizada
 
 - **Java 21**
 - **Spring Boot 3.4.3**
   - Spring Web (Spring MVC)
   - Spring Data JPA / Hibernate
   - Thymeleaf (Motor de templates HTML)
-  - Bean Validation (`spring-boot-starter-validation`)
-  - Spring Boot DevTools
-- **Banco de Dados**: H2 Database (em memória para desenvolvimento e testes locais)
+  - Validação de Bean (`spring-boot-starter-validation`)
+  - Ferramentas de desenvolvimento do Spring Boot
+- **Banco de Dados**: Banco de Dados H2 (em memória para desenvolvimento e testes locais)
 - **Gerenciamento de Dependências**: Apache Maven
 - **Variáveis de Ambiente**: `spring-dotenv`
 
 ## Arquitetura do Projeto
 
-O projeto segue o padrão arquitetural **MVC (Model-View-Controller)** com camada de serviço isolada:
+O projeto segue o padrão arquitetural MVC (Model-View-Controller) com camada de serviço isolada:
 
 ```text
 src/main/
